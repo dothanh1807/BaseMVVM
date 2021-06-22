@@ -1,5 +1,6 @@
 package com.vllenin.basemvvm.model.usecase.sample
 
+import com.vllenin.basemvvm.base.extensions.convertResource
 import com.vllenin.basemvvm.model.entities.Resource
 import com.vllenin.basemvvm.model.entities.sample.SampleData
 import com.vllenin.basemvvm.model.repository.sample.ISampleRepository
@@ -26,11 +27,12 @@ class SampleUseCase @Inject constructor(
     override suspend fun getSample(): Flow<Resource<SampleData>> {
         return sampleRepository.getSample()
             .map { resource ->
-                resource.data?.items?.forEach { item ->
-                    item.title = "-*-${item.title}-*-"
+                resource.convertResource {
+                    resource.data?.items?.forEach { item ->
+                        item.title = "-*-${item.title}-*-"
+                    }
+                    resource
                 }
-
-                resource
             }
     }
 
