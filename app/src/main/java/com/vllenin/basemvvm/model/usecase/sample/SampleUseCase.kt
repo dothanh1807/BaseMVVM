@@ -2,7 +2,8 @@ package com.vllenin.basemvvm.model.usecase.sample
 
 import com.vllenin.basemvvm.base.extensions.convertResource
 import com.vllenin.basemvvm.model.entities.Resource
-import com.vllenin.basemvvm.model.entities.sample.SampleData
+import com.vllenin.basemvvm.model.entities.sample.RealItem
+import com.vllenin.basemvvm.model.entities.sample.RealSampleData
 import com.vllenin.basemvvm.model.repository.sample.ISampleRepository
 import com.vllenin.basemvvm.model.usecase.BaseUseCase
 import kotlinx.coroutines.flow.Flow
@@ -22,16 +23,19 @@ class SampleUseCase @Inject constructor(
 ) : BaseUseCase(), ISampleUseCase {
 
     /**
-     * Ở đây dùng map để xử lý dữ liệu
+     * Ở đây dùng map để xử lý dữ liệu: Convert raw data nhận được
+     * tử sampleRepository.getSample() là Resource<SampleData> -> Resource<RealSampleData>
      */
-    override suspend fun getSample(): Flow<Resource<SampleData>> {
+    override suspend fun getSample(): Flow<Resource<RealSampleData>> {
         return sampleRepository.getSample()
             .map { resource ->
+                val listItem = ArrayList<RealItem>()
                 resource.convertResource {
                     resource.data?.items?.forEach { item ->
-                        item.title = "-*-${item.title}-*-"
+                        listItem.add(RealItem("-*-${item.title}-*-"))
                     }
-                    resource
+
+                    Resource.success(RealSampleData(resource.data?.title, listItem))
                 }
             }
     }

@@ -1,15 +1,17 @@
 package com.vllenin.basemvvm.ui.sample
 
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vllenin.basemvvm.R
 import com.vllenin.basemvvm.base.BaseFragmentX
+import com.vllenin.basemvvm.base.extensions.setOnSingleClickListener
 import com.vllenin.basemvvm.di.component.ApplicationComponent
 import com.vllenin.basemvvm.model.entities.Resource
-import com.vllenin.basemvvm.model.entities.sample.SampleData
+import com.vllenin.basemvvm.model.entities.sample.RealSampleData
 import kotlinx.android.synthetic.main.screen_sample.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -41,6 +43,19 @@ class SampleScreen : BaseFragmentX<SampleVM>() {
                     Toast.makeText(context, data, Toast.LENGTH_LONG).show()
                 }
             }
+
+        view?.findViewById<TextView>(R.id.textAction)?.apply {
+            text = "Update"
+            setOnSingleClickListener {
+                if (text.toString().contentEquals("Quit")) {
+                    activity?.finish()
+                } else {
+                    viewModel.requestUpdateData {
+                        text = "Quit"
+                    }
+                }
+            }
+        }
     }
 
     override fun initActions() {
@@ -49,9 +64,9 @@ class SampleScreen : BaseFragmentX<SampleVM>() {
 
     override fun initData(argument: Bundle?) {
         viewModel.fetchSampleContent()
-        viewModel.sampleData.observe(this, Observer<Resource<SampleData>> { resource ->
-            setTittleScreen(resource.data?.title ?: "")
-            (itemCollection.adapter as? SampleAdapter)?.setData(resource.data?.items)
+        viewModel.sampleData.observe(this, Observer<Resource<RealSampleData>> { resource ->
+            setTittleScreen(resource.data?.realTitle ?: "")
+            (itemCollection.adapter as? SampleAdapter)?.setData(resource.data?.realItems)
         })
     }
 

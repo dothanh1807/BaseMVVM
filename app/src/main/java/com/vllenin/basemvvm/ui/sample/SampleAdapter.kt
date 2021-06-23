@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vllenin.basemvvm.R
 import com.vllenin.basemvvm.base.extensions.bouncingAnimation
 import com.vllenin.basemvvm.base.extensions.setOnSingleClickListener
-import com.vllenin.basemvvm.model.entities.sample.Item
+import com.vllenin.basemvvm.model.entities.sample.RealItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
@@ -17,8 +17,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class SampleAdapter : RecyclerView.Adapter<SampleAdapter.ItemViewHolder>() {
 
-    private var listItem: List<Item>? = null
-    private var itemClickCallback: (item: Item?) -> Unit = {  }
+    private var listItem: List<RealItem>? = null
+    private var itemClickCallback: (item: RealItem?) -> Unit = {  }
 
     override fun getItemCount(): Int = listItem?.size ?: 0
 
@@ -35,12 +35,12 @@ class SampleAdapter : RecyclerView.Adapter<SampleAdapter.ItemViewHolder>() {
         holder.bindData(listItem?.get(position))
     }
 
-    fun setData(listItem: List<Item>?) = apply {
+    fun setData(listItem: List<RealItem>?) = apply {
         this.listItem = listItem
         notifyDataSetChanged()
     }
 
-    fun setItemClickCallback(itemClickCallback: (item: Item?) -> Unit) = apply {
+    fun setItemClickCallback(itemClickCallback: (item: RealItem?) -> Unit) = apply {
         this.itemClickCallback = itemClickCallback
     }
 
@@ -55,8 +55,8 @@ class SampleAdapter : RecyclerView.Adapter<SampleAdapter.ItemViewHolder>() {
             }
         }
 
-        fun bindData(item: Item?) {
-            (itemView as? TextView)?.text = item?.title
+        fun bindData(item: RealItem?) {
+            (itemView as? TextView)?.text = item?.realTitleItem
         }
 
     }
