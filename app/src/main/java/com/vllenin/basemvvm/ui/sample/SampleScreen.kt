@@ -64,7 +64,7 @@ class SampleScreen : BaseFragmentX<SampleVM>() {
 
     override fun initData(argument: Bundle?) {
         viewModel.fetchSampleContent()
-        viewModel.sampleData.observe(this, Observer<Resource<RealSampleData>> { resource ->
+        viewModel.sampleData.observe(viewLifecycleOwner, Observer<Resource<RealSampleData>> { resource ->
             setTittleScreen(resource.data?.realTitle ?: "")
             (itemCollection.adapter as? SampleAdapter)?.setData(resource.data?.realItems)
         })
